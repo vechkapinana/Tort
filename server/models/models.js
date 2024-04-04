@@ -9,7 +9,8 @@ const Client = sequelize.define('Client', {
     Surname: {type: DataTypes.STRING, allowNull: false},
     Name: {type: DataTypes.STRING, allowNull: false},
     Patronymic: {type: DataTypes.STRING},
-    Phone_number: {type: DataTypes.INTEGER, unique: true, allowNull: false}
+    Phone_number: {type: DataTypes.INTEGER, unique: true, allowNull: false},
+    Role:{type: DataTypes.STRING, defaultValue: "CLIENT"}
 })
 
 const Order = sequelize.define('Order', {
@@ -17,7 +18,6 @@ const Order = sequelize.define('Order', {
     ID_Client: {type: DataTypes.INTEGER},
     ID_Status: {type: DataTypes.INTEGER},
     DataD: {type: DataTypes.DATE},
-    Interval: {type: DataTypes.TIME},
     ID_Address: {type: DataTypes.INTEGER},
     Cost: {type: DataTypes.FLOAT},
     DataS: {type: DataTypes.DATE},

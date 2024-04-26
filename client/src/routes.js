@@ -5,7 +5,8 @@ import LK from './pages/LK';
 import Shop from './pages/Shop';
 import Auth from './pages/Auth';
 import ProductPage from './pages/ProductPage'
-import { ADMIN_ROUTE, BASKET_ROUTE, LK_ROUTE, LOGIN_ROUTE, ORDER_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from './utils/consts';
+import { ADMIN_ROUTE, AUTH_ROUTE, BASKET_ROUTE, LK_ROUTE, ORDER_ROUTE, PRODUCT_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from './utils/consts';
+import Catalog from './pages/Catalog';
 
 export const authRoutes = [
     {
@@ -28,11 +29,15 @@ export const authRoutes = [
 
 export const publicRoutes = [
     {
-        path: SHOP_ROUTE,
+        //path: SHOP_ROUTE,
         Component: Shop
     },
     {
-        path: LOGIN_ROUTE,
+        path: SHOP_ROUTE,
+        Component: Catalog
+    },
+    {
+        path: AUTH_ROUTE,
         Component: Auth
     },
     {

@@ -2,7 +2,7 @@ const sequelize = require('../bd')
 //Oписание типов
 const {DataTypes}=require('sequelize')
 
-const Client = sequelize.define('Client', {
+const Client = sequelize.define('client', {
     ID_Client: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     Login: {type: DataTypes.STRING, unique: true, allowNull: false},
     Password: {type: DataTypes.STRING},
@@ -10,48 +10,53 @@ const Client = sequelize.define('Client', {
     Name: {type: DataTypes.STRING, allowNull: false},
     Patronymic: {type: DataTypes.STRING},
     Phone_number: {type: DataTypes.INTEGER, unique: true, allowNull: false},
+    ID_Address: {type: DataTypes.INTEGER},
     Role:{type: DataTypes.STRING, defaultValue: "CLIENT"}
-})
+},{ timestamps: false })
 
-const Order = sequelize.define('Order', {
+const Order = sequelize.define('order', {
     ID_Order: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     ID_Client: {type: DataTypes.INTEGER},
     ID_Status: {type: DataTypes.INTEGER},
     DataD: {type: DataTypes.DATE},
-    ID_Address: {type: DataTypes.INTEGER},
     Cost: {type: DataTypes.FLOAT},
     DataS: {type: DataTypes.DATE},
     Coment:{type: DataTypes.STRING}
-})
+},{ timestamps: false })
 
-const Product_Order = sequelize.define('Product_Order', {
-    ID_Product_Order: {type: DataTypes.INTEGER, primaryKey: true},
-    ID_Order: {type: DataTypes.INTEGER},
-    ID_Product: {type: DataTypes.INTEGER}
-})
+const Product_Order = sequelize.define('product_Order', {
+    ID_Order: {type: DataTypes.INTEGER, primaryKey: true},
+    ID_Product: {type: DataTypes.INTEGER, primaryKey: true}
+},
+{
+    // Добавляем опцию composite key для указания, что это составной ключ
+    compositeKey: ['ID_Order', 'ID_Product']
+},{ timestamps: false })
 
-const Product = sequelize.define('Product', {
+const Product = sequelize.define('product', {
     ID_Product: {type: DataTypes.INTEGER, primaryKey: true},
     ID_Category: {type: DataTypes.INTEGER},
     Name: {type: DataTypes.STRING, allowNull: false},
+    Photo: {type: DataTypes.STRING},
     Grade: {type: DataTypes.FLOAT, defaultValue: 0},
     Compound: {type: DataTypes.STRING, allowNull: false},
     Exp: {type: DataTypes.STRING, allowNull: false},
-    Av: {type: DataTypes.BOOLEAN}
-})
-
-const Cost_Product = sequelize.define('Cost_Product', {
-    ID_Product: {type: DataTypes.INTEGER, primaryKey: true},
     Weight: {type: DataTypes.FLOAT, allowNull: false},
     Price: {type: DataTypes.FLOAT, allowNull: false}
-})
+},{ timestamps: false })
 
-const Category = sequelize.define('Category', {
+// const Cost_Product = sequelize.define('Cost_Product', {
+//     ID_Product: {type: DataTypes.INTEGER, primaryKey: true},
+//     Weight: {type: DataTypes.FLOAT, allowNull: false},
+//     Price: {type: DataTypes.FLOAT, allowNull: false}
+// })
+
+const Category = sequelize.define('category', {
     ID_Category: {type: DataTypes.INTEGER, primaryKey: true},
     Name: {type: DataTypes.STRING, allowNull: false}
-})
+},{ timestamps: false })
 
-const Review = sequelize.define('Review', {
+const Review = sequelize.define('review', {
     ID_Review: {type: DataTypes.INTEGER, primaryKey: true},
     ID_Client: {type: DataTypes.INTEGER},
     ID_Product: {type: DataTypes.INTEGER},
@@ -59,29 +64,32 @@ const Review = sequelize.define('Review', {
     Photo: {type: DataTypes.BLOB},
     DateS: {type: DataTypes.DATE},
     Grade: {type: DataTypes.FLOAT}
-})
+},{ timestamps: false })
 
-const Status = sequelize.define('Status', {
+const Status = sequelize.define('status', {
     ID_Status: {type: DataTypes.INTEGER, primaryKey: true},
     Name: {type: DataTypes.STRING}
-})
+},{ timestamps: false })
 
-const Address = sequelize.define('Address', {
+const Address = sequelize.define('address', {
     ID_Address: {type: DataTypes.INTEGER, primaryKey: true},
     Street: {type: DataTypes.STRING, allowNull: false},
     House: {type: DataTypes.INTEGER, allowNull: false},
     Apartment: {type: DataTypes.INTEGER, allowNull: false},
     Floor: {type: DataTypes.STRING}
-})
+},{ timestamps: false })
 
 Order.hasMany(Status)
 Status.belongsTo(Order)
 
-Address.hasMany(Order)
-Order.belongsTo(Address)
+// Address.hasMany(Order)
+// Order.belongsTo(Address)
 
 Client.hasMany(Order)
 Order.belongsTo(Client)
+
+Client.hasMany(Address)
+Address.belongsTo(Client)
 
 Client.hasMany(Review)
 Review.belongsTo(Client)
@@ -95,8 +103,8 @@ Review.belongsTo(Product)
 Product.hasMany(Product_Order)
 Product_Order.belongsTo(Product)
 
-Product.hasMany(Cost_Product)
-Cost_Product.belongsTo(Product)
+// Product.hasMany(Cost_Product)
+// Cost_Product.belongsTo(Product)
 
 Category.hasMany(Product)
 Product.belongsTo(Category)
@@ -110,7 +118,7 @@ module.exports = {
     Product_Order,
     Product,
     Category,
-    Cost_Product
+    // Cost_Product
 }
 
 // module.exports = {
